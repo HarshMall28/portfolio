@@ -2,10 +2,11 @@
 
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 
 export const InfiniteMovingCards = ({
   items,
-  direction = "left",
+  direction = "right",
   speed = "fast",
   pauseOnHover = true,
   className,
@@ -76,7 +77,7 @@ export const InfiniteMovingCards = ({
       } else {
         containerRef.current.style.setProperty(
           "--animation-duration",
-          "80s"
+          "50s"
         );
       }
     }
@@ -118,8 +119,10 @@ export const InfiniteMovingCards = ({
               <div className="relative z-20 mt-6 flex flex-row items-center">
                 <span className="flex flex-col gap-1">
                   <div className="me-3">
-                    <img
+                    <Image
                       src={item.img}
+                      width={30}
+                      height={30}
                       alt="profile"
                       className="w-12 h-12 rounded-full"
                     />

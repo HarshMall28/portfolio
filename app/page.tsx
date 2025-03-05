@@ -2,16 +2,31 @@
 import Hero from "@/components/Hero";
 import dynamic from "next/dynamic";
 import { FloatingNav } from "@/components/ui/floating-navbar";
-// import Grid from "@/components/Grid";
-const Grid = dynamic(() => import("../components/Grid"), {
-  ssr: false, // ✅ Ensures this runs only on the client
-});
-import RecentProjects from "@/components/RecentProjects";
 import { navItems } from "@/data";
-import Clients from "@/components/Clients";
-import Experience from "@/components/Experience";
-import Approach from "@/components/Approach";
-import Footer from "@/components/Footer";
+import { Suspense } from "react";
+
+// Lazy load components
+const Grid = dynamic(() => import("../components/Grid"), {
+  ssr: false,
+});
+const RecentProjects = dynamic(
+  () => import("@/components/RecentProjects"),
+  {
+    loading: () => <p>Loading Recent Projects...</p>,
+  }
+);
+const Clients = dynamic(() => import("@/components/Clients"), {
+  loading: () => <p>Loading Clients...</p>,
+});
+const Experience = dynamic(() => import("@/components/Experience"), {
+  loading: () => <p>Loading Experience...</p>,
+});
+const Approach = dynamic(() => import("@/components/Approach"), {
+  loading: () => <p>Loading Approach...</p>,
+});
+const Footer = dynamic(() => import("@/components/Footer"), {
+  loading: () => <p>Loading Footer...</p>,
+});
 
 export default function Home() {
   return (
@@ -22,12 +37,24 @@ export default function Home() {
       <div className="max-w-7xl w-full">
         <FloatingNav navItems={navItems} />
         <Hero />
-        <Grid />
-        <RecentProjects />
-        <Clients />
-        <Experience />
-        <Approach />
-        <Footer />
+        <Suspense fallback={<div>Loading Grid...</div>}>
+          <Grid />
+        </Suspense>
+        <Suspense fallback={<div>Loading Recent Projects...</div>}>
+          <RecentProjects />
+        </Suspense>
+        <Suspense fallback={<div>Loading Clients...</div>}>
+          <Clients />
+        </Suspense>
+        <Suspense fallback={<div>Loading Experience...</div>}>
+          <Experience />
+        </Suspense>
+        <Suspense fallback={<div>Loading Approach...</div>}>
+          <Approach />
+        </Suspense>
+        <Suspense fallback={<div>Loading Footer...</div>}>
+          <Footer />
+        </Suspense>
       </div>
     </main>
   );
